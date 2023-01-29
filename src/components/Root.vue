@@ -62,6 +62,10 @@
         <a class="text-gray-500" href="https://space.bilibili.com/12566101"
           >秋葉aaaki</a
         >
+        <a> | </a>
+        <a class="text-gray-500" href="https://novelai.dev"
+          >NovelAI.Dev</a
+        >
       </span>
     </div>
   </div>
@@ -78,9 +82,10 @@ const fileInfoRef = ref(null);
 const jsonData = ref(null);
 
 const modelSig = {
-  string_to_param: "Embedding",
+  "string_to_param": "Embedding",
   "model.diffusion_model.": "Stable Diffusion",
-  lora_te_text_model_encoder: "LoRA",
+  "cond_stage_model.transformer.": "Stable Diffusion",
+  "lora_te_text_model_encoder": "LoRA",
   "encoder.down.0.block": "VAE",
   "linear.0.weight":"Hypernet",
   "linear1.weight":"Hypernet"
