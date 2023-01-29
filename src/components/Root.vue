@@ -87,9 +87,17 @@ const modelSig = {
   "cond_stage_model.transformer.": "Stable Diffusion",
   "lora_te_text_model_encoder": "LoRA",
   "encoder.down.0.block": "VAE",
-  "linear.0.weight":"Hypernet",
-  "linear1.weight":"Hypernet"
+  "linear.0.weight":"Hypernetworks",
+  "linear1.weight":"Hypernetworks"
 };
+
+const modelUseGuide = {
+  "Stable Diffusion": "大模型。放入 models/Stable-diffusion 文件夹后，进入 webui 在左上角点击刷新后选择模型。",
+  "VAE": "放入 models/VAE ，在 webui 中的设置页面 - Stable Diffusion - 模型的 VAE 选择并保存",
+  "LoRA": "放入 models/Lora ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 Lora 选项卡点击使用。",
+  "Hypernetworks": "放入 models/hypernetworks ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 hypernetworks 选项卡点击使用。",
+  "Embedding": "放入 embeddings ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 embeddings 选项卡点击使用。",
+}
 
 watch(fileRef, () => {
   if (!fileRef.value) return;
@@ -113,7 +121,7 @@ const run = () => {
 };
 
 const guessModel = (content) => {
-  let modelType = "未知";
+  let modelType = "";
   let fileSize = fileRef.value.size;
   let fileExt = fileRef.value.name.split(".").pop();
   if (fileSize < 1024 * 10) {
@@ -132,11 +140,16 @@ const guessModel = (content) => {
     }
   }
 
+  let modelTypeOk = modelType == "" ? "未知模型种类或非模型" : modelType + " 模型"
   let ok = [
     { k: "文件名", v: fileRef.value.name },
     { k: "文件大小", v: prettyBytes(fileSize) },
-    { k: "模型种类", v: modelType + " 模型"},
+    { k: "模型种类", v: modelTypeOk},
   ];
+
+  if(modelType != "") {
+    ok.push({ k: "模型用法", v: modelUseGuide[modelType] })
+  }
 
   if (fileExt == "safetensors" && modelType == "LoRA") {
     let ret = tryExtractLoraMeta(content)
