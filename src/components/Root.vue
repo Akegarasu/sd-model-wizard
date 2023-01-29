@@ -6,7 +6,7 @@
     <div class="max-w-740px" style="margin: 0 auto">
       <el-upload class="upload-demo" drag multiple :before-upload="handleUpload">
         <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="el-upload__text">拖动文件到这里或者点击上传</div>
+        <div class="el-upload__text">拖动文件到这里或者点击选择文件</div>
       </el-upload>
     </div>
 
@@ -27,10 +27,7 @@
         </div>
       </div>
     </div>
-    <p class="text-gray-500 my-2 text-sm">
-      *运算完全在你的电脑上运行不会上传到云端
-    </p>
-    <a class="text-gray-500" href="https://www.bilibili.com/read/cv21362202">图文详解！最全模型用法</a>
+    <a class="text-gray-500" href="https://www.bilibili.com/read/cv21362202" target="_blank">图文详解！最全模型用法</a>
     <div class="my-4 pt-4">
       如果您觉得本项目对您有帮助 请在 →
       <a class="inline-block text-sm text-gray-500" href="https://github.com/Akegarasu/sd-model-wizard">GitHub</a>
