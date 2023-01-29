@@ -82,7 +82,8 @@ const modelSig = {
   "model.diffusion_model.": "Stable Diffusion",
   lora_te_text_model_encoder: "LoRA",
   "encoder.down.0.block": "VAE",
-  // "":"Hypernet(超网络) 模型"
+  "linear.0.weight":"Hypernet",
+  "linear1.weight":"Hypernet"
 };
 
 watch(fileRef, () => {
@@ -129,7 +130,7 @@ const guessModel = (content) => {
   let ok = [
     { k: "文件名", v: fileRef.value.name },
     { k: "文件大小", v: prettyBytes(fileSize) },
-    { k: "模型种类", v: modelType + "模型"},
+    { k: "模型种类", v: modelType + " 模型"},
   ];
 
   if (fileExt == "safetensors" && modelType == "LoRA") {
