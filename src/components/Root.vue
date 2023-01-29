@@ -34,10 +34,7 @@
           >
             {{ item.v }}
           </p>
-          <json-viewer
-            :value="jsonData"
-            v-if="item.k == 'Info'"
-          ></json-viewer>
+          <json-viewer :value="jsonData" v-if="item.k == 'Info'"></json-viewer>
         </div>
       </div>
     </div>
@@ -63,9 +60,7 @@
           >秋葉aaaki</a
         >
         <a> | </a>
-        <a class="text-gray-500" href="https://novelai.dev"
-          >NovelAI.Dev</a
-        >
+        <a class="text-gray-500" href="https://novelai.dev">NovelAI.Dev</a>
       </span>
     </div>
   </div>
@@ -82,22 +77,25 @@ const fileInfoRef = ref(null);
 const jsonData = ref(null);
 
 const modelSig = {
-  "string_to_param": "Embedding",
+  string_to_param: "Embedding",
   "model.diffusion_model.": "Stable Diffusion",
   "cond_stage_model.transformer.": "Stable Diffusion",
-  "lora_te_text_model_encoder": "LoRA",
+  lora_te_text_model_encoder: "LoRA",
   "encoder.down.0.block": "VAE",
-  "linear.0.weight":"Hypernetworks",
-  "linear1.weight":"Hypernetworks"
+  "linear.0.weight": "Hypernetworks",
+  "linear1.weight": "Hypernetworks",
 };
 
 const modelUseGuide = {
-  "Stable Diffusion": "大模型。放入 models/Stable-diffusion 文件夹后，进入 webui 在左上角点击刷新后选择模型。",
-  "VAE": "放入 models/VAE ，在 webui 中的设置页面 - Stable Diffusion - 模型的 VAE 选择并保存",
-  "LoRA": "放入 models/Lora ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 Lora 选项卡点击使用。",
-  "Hypernetworks": "放入 models/hypernetworks ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 hypernetworks 选项卡点击使用。",
-  "Embedding": "放入 embeddings ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 embeddings 选项卡点击使用。",
-}
+  "Stable Diffusion":
+    "大模型。放入 models/Stable-diffusion 文件夹后，进入 webui 在左上角点击刷新后选择模型。",
+  VAE: "放入 models/VAE ，在 webui 中的设置页面 - Stable Diffusion - 模型的 VAE 选择并保存",
+  LoRA: "放入 models/Lora ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 Lora 选项卡点击使用。",
+  Hypernetworks:
+    "放入 models/hypernetworks ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 hypernetworks 选项卡点击使用。",
+  Embedding:
+    "放入 embeddings ，在 webui 中，“生成” 按钮的下方选择 🎴 按钮，找到 embeddings 选项卡点击使用。",
+};
 
 watch(fileRef, () => {
   if (!fileRef.value) return;
@@ -130,46 +128,47 @@ const guessModel = (content) => {
   }
 
   if (fileSize < 1024 * 1024 && content.indexOf("string_to_param") != -1) {
-    modelType = "Embedding"
+    modelType = "Embedding";
   } else {
     for (let sig in modelSig) {
       if (content.indexOf(sig) != -1) {
         modelType = modelSig[sig];
-        break
+        break;
       }
     }
   }
 
-  let modelTypeOk = modelType == "" ? "未知模型种类或非模型" : modelType + " 模型"
+  let modelTypeOk =
+    modelType == "" ? "未知模型种类或非模型" : modelType + " 模型";
   let ok = [
     { k: "文件名", v: fileRef.value.name },
     { k: "文件大小", v: prettyBytes(fileSize) },
-    { k: "模型种类", v: modelTypeOk},
+    { k: "模型种类", v: modelTypeOk },
   ];
 
-  if(modelType != "") {
-    ok.push({ k: "模型用法", v: modelUseGuide[modelType] })
+  if (modelType != "") {
+    ok.push({ k: "模型用法", v: modelUseGuide[modelType] });
   }
 
   if (fileExt == "safetensors" && modelType == "LoRA") {
-    let ret = tryExtractLoraMeta(content)
+    let ret = tryExtractLoraMeta(content);
     if (ret) {
-      ok.push({k:"Info", v: jsonData})
+      ok.push({ k: "Info", v: jsonData });
     }
   }
 
-  fileInfoRef.value = ok
+  fileInfoRef.value = ok;
 };
 
 const tryExtractLoraMeta = (content) => {
-  const reg = new RegExp(/{"__metadata__":(.*ss_vae_name":.+?)}/)
-  let match = reg.exec(content)
-  if(match) {
-    jsonData.value = JSON.parse(match[1]+"}")
-    return true
+  const reg = new RegExp(/{"__metadata__":(.*ss_vae_name":.+?)}/);
+  let match = reg.exec(content);
+  if (match) {
+    jsonData.value = JSON.parse(match[1] + "}");
+    return true;
   }
-  return false
-}
+  return false;
+};
 
 const prettyBytes = (size) => {
   const printable = (d, z) => {
